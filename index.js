@@ -1,8 +1,7 @@
 import express from 'express'
 const app = express()
 
-
-const PORT = 4000;
+import { PATH } from './config/env';
 
 app.get("/", (req, res) => {
     res.send({ "message": "hi there" })
