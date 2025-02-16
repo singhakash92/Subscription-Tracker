@@ -4,4 +4,4 @@ import { config } from "dotenv";
 // loads up the .env file content in process.js
 config({path : '.env.development.local'})
 
-export const {PORT} = process.env
+export const {PORT, DB_URI} = process.env
