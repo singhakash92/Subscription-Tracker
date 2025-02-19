@@ -55,8 +55,45 @@ export const signUp = async (req, res, next) => {
     }
 }
 
-export const signIn = (req, res, next) => {
-    res.send({ "message": "sign-in route" })
+export const signIn = async (req, res, next) => {
+
+  try {
+    const { email, password } = req.body;
+
+    const userExists = await User.findOne({ email })
+    
+    if (!userExists) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error
+    } else {
+
+      const isPasswordValid = await bcrypt.compare(password, userExists.password)
+      
+      if (!isPasswordValid) {
+         const error = new Error("Invalid password or email");
+         error.statusCode = 404;
+         throw error;
+      } else {
+
+        const token = jwt.sign({ userId: userExists._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
+        
+        res.status(200).json({
+          "success": true, 
+          "message": "User signed in successfully",
+          data: {
+            token: token,
+            user : userExists
+           }
+        })
+        
+      }
+      
+    }
+    
+  } catch (error) {
+    next(error)
+  }
 }
 
 export const signOut = (req, res, next) =>{
