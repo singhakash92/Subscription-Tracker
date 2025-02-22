@@ -1,13 +1,13 @@
 import express from 'express'
+import { getUsers } from '../controller/user.controller.js'
+import { getUser } from '../controller/user.controller.js'
 
 const userRouter = express.Router()
 
-userRouter.get("/", (req, res) => {
-    res.send({"message" : "get all the users"})
-})
-userRouter.get("/:id", (req, res) => {
-    res.send({"message" : "get  the users"})
-})
+userRouter.get("/", getUsers)
+
+userRouter.get("/:id", getUser)
+
 userRouter.post("/", (req, res) => {
     res.send({"message" : "create user"})
 })
